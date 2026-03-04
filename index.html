@@ -582,9 +582,7 @@ body::after{
 // ════════════════════════════════════════
 // ADMIN CONFIGURATION
 // ════════════════════════════════════════
-// After deploying the Google Apps Script, paste the web app URL here:
-const WEBHOOK_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
-const ADMIN_EMAIL = 'ron@saverone.com';
+const FORM_EMAIL = 'rong@saver.one';
 
 // ════════════════════════════════════════
 // QUESTIONS DATA
@@ -808,23 +806,25 @@ function getPassStatus(pct){
 
 function sendResultsToServer(){
   const pct = Math.round(score / questions.length * 100);
+  const passed = pct >= 70;
+  const first = document.getElementById('firstName').value.trim();
+  const last = document.getElementById('lastName').value.trim();
 
   const payload = {
-    firstName: document.getElementById('firstName').value.trim(),
-    lastName: document.getElementById('lastName').value.trim(),
-    score: score,
-    total: questions.length,
-    percentage: pct
+    'First Name': first,
+    'Last Name': last,
+    'Score': score + '/' + questions.length + ' (' + pct + '%)',
+    'Status': passed ? 'PASS ✅' : 'FAIL ❌',
+    '_subject': (passed ? '✅' : '❌') + ' Cyber Training: ' + first + ' ' + last + ' — ' + pct + '%',
+    '_template': 'table',
+    '_captcha': 'false'
   };
 
-  if(WEBHOOK_URL && WEBHOOK_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'){
-    fetch(WEBHOOK_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-  }
+  fetch('https://formsubmit.co/ajax/' + FORM_EMAIL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(function(){});
 }
 
 function showResults(){
