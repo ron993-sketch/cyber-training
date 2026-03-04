@@ -808,52 +808,23 @@ function getPassStatus(pct){
 
 function sendResultsToServer(){
   const pct = Math.round(score / questions.length * 100);
-  const passed = getPassStatus(pct);
-  const dateStr = getDateStr();
-  const wrongAnswers = answers.filter(a => !a.isCorrect);
-  const letters = ['A','B','C','D'];
 
   const payload = {
-    name: employeeName,
-    date: dateStr,
+    firstName: document.getElementById('firstName').value.trim(),
+    lastName: document.getElementById('lastName').value.trim(),
     score: score,
     total: questions.length,
-    percentage: pct,
-    passed: passed,
-    wrongQuestions: wrongAnswers.map(a => {
-      const q = questions[a.qIndex];
-      return {
-        number: a.qIndex + 1,
-        category: q.category,
-        question: q.text,
-        employeeAnswer: letters[a.chosenIdx] + ' - ' + q.options[a.chosenIdx],
-        correctAnswer: letters[q.correct] + ' - ' + q.options[q.correct]
-      };
-    })
+    percentage: pct
   };
 
-  // Send to Google Apps Script webhook
   if(WEBHOOK_URL && WEBHOOK_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'){
     fetch(WEBHOOK_URL, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
-    }).then(() => {
-      const toast = document.getElementById('emailToast');
-      if(toast) toast.textContent = '✅ התוצאות נשלחו בהצלחה למערכת.';
-    }).catch(() => {
-      const toast = document.getElementById('emailToast');
-      if(toast) toast.textContent = '⚠️ שגיאה בשליחה. התוצאות נשמרו מקומית.';
     });
   }
-
-  // Always save locally as backup
-  try {
-    const stored = JSON.parse(localStorage.getItem('cyberTrainingResults') || '[]');
-    stored.push(payload);
-    localStorage.setItem('cyberTrainingResults', JSON.stringify(stored));
-  } catch(e){}
 }
 
 function showResults(){
