@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SaverOne | הדרכת Anti-Fraud & Phishing</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-deep:#080b1a;
+  --bg-card:#0d1128;
+  --bg-card-hover:#131940;
+  --accent-cyan:#00e5ff;
+  --accent-magenta:#e040fb;
+  --accent-green:#00e676;
+  --accent-red:#ff1744;
+  --accent-amber:#ffab00;
+  --text-primary:#e8eaf6;
+  --text-secondary:#7986cb;
+  --text-dim:#3949ab;
+  --glow-cyan:0 0 30px rgba(0,229,255,.25);
+  --glow-magenta:0 0 30px rgba(224,64,251,.25);
+  --glow-green:0 0 30px rgba(0,230,118,.3);
+  --glow-red:0 0 30px rgba(255,23,68,.3);
+  --radius:14px;
+  --transition:all .35s cubic-bezier(.4,0,.2,1);
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{
+  font-family:'Heebo',sans-serif;
+  background:var(--bg-deep);
+  color:var(--text-primary);
+  min-height:100vh;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* ── Animated background grid ── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:
+    linear-gradient(rgba(0,229,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,229,255,.03) 1px,transparent 1px);
+  background-size:60px 60px;
+  animation:gridDrift 20s linear infinite;
+}
+@keyframes gridDrift{0%{transform:translate(0,0)}100%{transform:translate(60px,60px)}}
+
+/* Floating orbs */
+body::after{
+  content:'';position:fixed;top:-30%;right:-10%;width:600px;height:600px;
+  background:radial-gradient(circle,rgba(224,64,251,.08),transparent 70%);
+  border-radius:50%;z-index:0;animation:orbFloat 15s ease-in-out infinite alternate;
+}
+@keyframes orbFloat{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-100px,80px) scale(1.2)}}
+
+.orb-2{
+  position:fixed;bottom:-20%;left:-5%;width:500px;height:500px;
+  background:radial-gradient(circle,rgba(0,229,255,.06),transparent 70%);
+  border-radius:50%;z-index:0;animation:orbFloat2 18s ease-in-out infinite alternate;
+}
+@keyframes orbFloat2{0%{transform:translate(0,0) scale(1)}100%{transform:translate(60px,-90px) scale(1.15)}}
+
+/* ── Layout ── */
+.app{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:24px 20px 60px}
+
+/* ── Header ── */
+.header{text-align:center;padding:40px 0 20px;position:relative}
+.logo-badge{
+  display:inline-flex;align-items:center;gap:12px;
+  background:linear-gradient(135deg,rgba(0,229,255,.1),rgba(224,64,251,.1));
+  border:1px solid rgba(0,229,255,.2);
+  border-radius:50px;padding:10px 28px;margin-bottom:20px;
+  backdrop-filter:blur(10px);
+}
+.logo-badge .shield{font-size:1.6rem}
+.logo-badge span{
+  font-family:'Rubik',sans-serif;font-weight:700;font-size:1.1rem;
+  background:linear-gradient(135deg,var(--accent-cyan),var(--accent-magenta));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  letter-spacing:1px;
+}
+.header h1{
+  font-family:'Rubik',sans-serif;font-weight:900;font-size:clamp(1.8rem,5vw,2.6rem);
+  line-height:1.3;margin-bottom:8px;
+  background:linear-gradient(135deg,#fff 30%,var(--accent-cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.header p{color:var(--text-secondary);font-size:1rem;font-weight:300}
+
+/* ── Start Screen ── */
+.start-screen{text-align:center;padding:40px 0}
+
+.btn-start{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'Rubik',sans-serif;font-weight:700;font-size:1.15rem;
+  padding:16px 48px;border:none;border-radius:50px;cursor:pointer;
+  background:linear-gradient(135deg,var(--accent-cyan),#0091ea);
+  color:var(--bg-deep);
+  box-shadow:0 4px 30px rgba(0,229,255,.3),inset 0 1px 0 rgba(255,255,255,.2);
+  transition:var(--transition);position:relative;overflow:hidden;
+}
+.btn-start::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent,rgba(255,255,255,.15),transparent);
+  transform:translateX(-100%);transition:transform .5s;
+}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 8px 40px rgba(0,229,255,.4)}
+.btn-start:hover::before{transform:translateX(100%)}
+
+/* ── Intro Text ── */
+.intro-text{
+  background:linear-gradient(135deg,rgba(0,229,255,.06),rgba(224,64,251,.06));
+  border:1px solid rgba(0,229,255,.15);border-radius:var(--radius);
+  padding:20px 24px;margin:20px 0;font-size:.95rem;
+  color:var(--text-secondary);line-height:1.8;text-align:right;
+}
+.intro-text strong{color:var(--accent-cyan)}
+
+/* ── Training Tip Box ── */
+.q-training{
+  background:linear-gradient(135deg,rgba(0,229,255,.06),rgba(224,64,251,.04));
+  border:1px solid rgba(0,229,255,.15);border-radius:var(--radius);
+  padding:16px 20px;margin-bottom:22px;font-size:.92rem;
+  line-height:1.75;color:var(--text-secondary);position:relative;
+  padding-right:48px;
+}
+.q-training::before{
+  content:'💡';position:absolute;top:14px;right:16px;font-size:1.3rem;
+}
+
+/* ── Progress bar ── */
+.progress-zone{
+  margin:0 0 30px;padding:16px 0;
+  border-bottom:1px solid rgba(0,229,255,.08);
+}
+.progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.progress-header .counter{
+  font-family:'Rubik',sans-serif;font-weight:600;font-size:.9rem;color:var(--accent-cyan);
+}
+.progress-header .score-live{
+  font-family:'Rubik',sans-serif;font-weight:500;font-size:.85rem;color:var(--text-secondary);
+  display:flex;align-items:center;gap:6px;
+}
+.progress-header .score-live .dot{
+  width:8px;height:8px;border-radius:50%;background:var(--accent-green);
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+.progress-track{
+  width:100%;height:6px;background:rgba(0,229,255,.08);
+  border-radius:3px;overflow:hidden;position:relative;
+}
+.progress-fill{
+  height:100%;border-radius:3px;
+  background:linear-gradient(90deg,var(--accent-cyan),var(--accent-magenta));
+  transition:width .6s cubic-bezier(.4,0,.2,1);
+  position:relative;
+}
+.progress-fill::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);
+  animation:shimmer 2s ease-in-out infinite;
+}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+/* ── Question Card ── */
+.question-card{
+  background:var(--bg-card);
+  border:1px solid rgba(0,229,255,.1);
+  border-radius:20px;padding:36px 32px;
+  position:relative;overflow:hidden;
+  animation:cardIn .5s cubic-bezier(.4,0,.2,1);
+}
+@keyframes cardIn{
+  0%{opacity:0;transform:translateY(30px) scale(.97)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+.question-card::before{
+  content:'';position:absolute;top:0;right:0;left:0;height:3px;
+  background:linear-gradient(90deg,var(--accent-cyan),var(--accent-magenta),var(--accent-cyan));
+  background-size:200%;animation:borderGlow 3s linear infinite;
+}
+@keyframes borderGlow{0%{background-position:0%}100%{background-position:200%}}
+
+.q-category{
+  display:inline-block;font-size:.75rem;font-weight:500;
+  color:var(--accent-magenta);background:rgba(224,64,251,.1);
+  padding:4px 14px;border-radius:20px;margin-bottom:16px;
+  border:1px solid rgba(224,64,251,.2);
+}
+.q-icon{font-size:2.8rem;margin-bottom:14px;display:block;
+  filter:drop-shadow(0 0 20px rgba(0,229,255,.3));
+}
+.q-text{
+  font-family:'Rubik',sans-serif;font-weight:700;font-size:clamp(1.15rem,3vw,1.35rem);
+  line-height:1.6;margin-bottom:28px;color:#fff;
+}
+
+/* ── Answer Options ── */
+.options{display:flex;flex-direction:column;gap:12px}
+.option-btn{
+  display:flex;align-items:center;gap:14px;width:100%;
+  text-align:right;font-family:'Heebo',sans-serif;font-size:1rem;font-weight:400;
+  padding:18px 22px;border-radius:var(--radius);cursor:pointer;
+  background:rgba(0,229,255,.03);
+  border:1.5px solid rgba(0,229,255,.1);
+  color:var(--text-primary);transition:var(--transition);
+  position:relative;overflow:hidden;
+}
+.option-btn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent,rgba(0,229,255,.05));
+  opacity:0;transition:opacity .3s;
+}
+.option-btn:hover:not(.disabled){
+  border-color:rgba(0,229,255,.35);background:rgba(0,229,255,.06);
+  transform:translateX(-4px);
+}
+.option-btn:hover:not(.disabled)::before{opacity:1}
+
+.option-letter{
+  flex-shrink:0;width:36px;height:36px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:10px;font-family:'Rubik',sans-serif;font-weight:700;font-size:.9rem;
+  background:rgba(0,229,255,.1);color:var(--accent-cyan);
+  border:1px solid rgba(0,229,255,.2);transition:var(--transition);
+}
+.option-btn:hover:not(.disabled) .option-letter{
+  background:rgba(0,229,255,.2);
+}
+
+/* Answer states */
+.option-btn.correct{
+  border-color:var(--accent-green)!important;
+  background:rgba(0,230,118,.08)!important;
+  animation:correctPop .4s ease;
+}
+.option-btn.correct .option-letter{
+  background:var(--accent-green);color:var(--bg-deep);border-color:var(--accent-green);
+}
+@keyframes correctPop{
+  0%{transform:scale(1)}30%{transform:scale(1.02)}100%{transform:scale(1)}
+}
+
+.option-btn.wrong{
+  border-color:var(--accent-red)!important;
+  background:rgba(255,23,68,.06)!important;
+  animation:shake .4s ease;
+}
+.option-btn.wrong .option-letter{
+  background:var(--accent-red);color:#fff;border-color:var(--accent-red);
+}
+@keyframes shake{
+  0%,100%{transform:translateX(0)}25%{transform:translateX(6px)}75%{transform:translateX(-6px)}
+}
+
+.option-btn.disabled{pointer-events:none;opacity:.5}
+.option-btn.disabled.correct{opacity:1}
+
+/* ── Feedback ── */
+.feedback{
+  margin-top:24px;padding:20px 24px;border-radius:var(--radius);
+  font-size:.95rem;line-height:1.7;
+  animation:feedIn .4s ease;
+}
+@keyframes feedIn{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:translateY(0)}}
+
+.feedback.correct{
+  background:rgba(0,230,118,.06);border:1px solid rgba(0,230,118,.2);color:var(--accent-green);
+}
+.feedback.wrong{
+  background:rgba(255,23,68,.06);border:1px solid rgba(255,23,68,.2);color:#ff8a80;
+}
+.feedback .fb-icon{font-size:1.3rem;margin-left:8px;vertical-align:middle}
+
+/* ── Next Button ── */
+.btn-next{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;margin-top:20px;padding:16px;
+  font-family:'Rubik',sans-serif;font-weight:600;font-size:1.05rem;
+  border:1.5px solid var(--accent-cyan);border-radius:var(--radius);
+  background:transparent;color:var(--accent-cyan);cursor:pointer;
+  transition:var(--transition);
+}
+.btn-next:hover{background:rgba(0,229,255,.08);transform:translateY(-1px)}
+.btn-next .arrow{transition:transform .3s}
+.btn-next:hover .arrow{transform:translateX(-4px)}
+
+/* ── Results Screen ── */
+.results{text-align:center;padding:20px 0;animation:cardIn .6s ease}
+
+.score-ring{
+  position:relative;width:200px;height:200px;margin:0 auto 30px;
+}
+.score-ring svg{transform:rotate(-90deg)}
+.score-ring circle{fill:none;stroke-width:8}
+.score-ring .track{stroke:rgba(0,229,255,.1)}
+.score-ring .fill-ring{
+  stroke:url(#scoreGrad);stroke-linecap:round;
+  transition:stroke-dashoffset 1.5s cubic-bezier(.4,0,.2,1);
+}
+.score-number{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+}
+.score-number .pct{
+  font-family:'Rubik',sans-serif;font-weight:900;
+  font-size:3rem;line-height:1;
+  background:linear-gradient(135deg,var(--accent-cyan),var(--accent-magenta));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.score-number .pct-sign{font-size:1.5rem}
+.score-number .of{color:var(--text-secondary);font-size:.85rem;margin-top:4px}
+
+.result-title{
+  font-family:'Rubik',sans-serif;font-weight:900;
+  font-size:clamp(1.6rem,4vw,2.2rem);margin-bottom:8px;
+}
+.result-subtitle{color:var(--text-secondary);font-size:1.05rem;margin-bottom:32px;line-height:1.6}
+
+.result-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:32px;
+}
+.stat-box{
+  background:var(--bg-card);border:1px solid rgba(0,229,255,.1);
+  border-radius:var(--radius);padding:20px 12px;
+}
+.stat-box .val{
+  font-family:'Rubik',sans-serif;font-weight:700;font-size:1.6rem;
+  color:var(--accent-cyan);
+}
+.stat-box .lbl{color:var(--text-secondary);font-size:.8rem;margin-top:4px}
+
+.compliance-note{
+  background:linear-gradient(135deg,rgba(0,229,255,.06),rgba(224,64,251,.06));
+  border:1px solid rgba(0,229,255,.15);border-radius:var(--radius);
+  padding:20px 24px;margin-bottom:28px;font-size:.9rem;
+  color:var(--text-secondary);line-height:1.7;
+}
+.compliance-note strong{color:var(--accent-cyan)}
+
+.btn-retry{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'Rubik',sans-serif;font-weight:600;font-size:1rem;
+  padding:14px 40px;border:1.5px solid var(--accent-magenta);
+  border-radius:50px;background:transparent;color:var(--accent-magenta);
+  cursor:pointer;transition:var(--transition);
+}
+.btn-retry:hover{background:rgba(224,64,251,.08);transform:translateY(-2px)}
+
+/* ── Name Form ── */
+.name-form{
+  max-width:400px;margin:30px auto 0;
+  background:var(--bg-card);border:1px solid rgba(0,229,255,.15);
+  border-radius:20px;padding:32px 28px;
+}
+.name-form h3{
+  font-family:'Rubik',sans-serif;font-weight:700;font-size:1.1rem;
+  color:var(--accent-cyan);margin-bottom:20px;text-align:center;
+}
+.name-field{margin-bottom:16px}
+.name-field label{
+  display:block;font-size:.85rem;color:var(--text-secondary);
+  margin-bottom:6px;font-weight:500;
+}
+.name-field input{
+  width:100%;padding:14px 18px;
+  font-family:'Heebo',sans-serif;font-size:1rem;
+  background:rgba(0,229,255,.04);
+  border:1.5px solid rgba(0,229,255,.15);
+  border-radius:var(--radius);color:var(--text-primary);
+  outline:none;transition:var(--transition);
+}
+.name-field input::placeholder{color:var(--text-dim)}
+.name-field input:focus{
+  border-color:var(--accent-cyan);
+  box-shadow:0 0 20px rgba(0,229,255,.1);
+}
+.name-error{
+  color:var(--accent-red);font-size:.82rem;
+  text-align:center;margin-bottom:12px;min-height:1.2em;
+}
+
+/* ── Employee Badge in Results ── */
+.employee-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,rgba(0,229,255,.1),rgba(224,64,251,.1));
+  border:1px solid rgba(0,229,255,.2);
+  border-radius:50px;padding:8px 24px;margin-bottom:16px;
+  font-family:'Rubik',sans-serif;font-weight:600;font-size:1rem;
+  color:var(--accent-cyan);
+}
+
+/* ── Certificate ── */
+.certificate{
+  background:linear-gradient(135deg,rgba(0,229,255,.04),rgba(224,64,251,.04));
+  border:2px solid rgba(0,229,255,.2);border-radius:20px;
+  padding:28px 24px;margin:24px 0;position:relative;overflow:hidden;
+}
+.certificate::before{
+  content:'';position:absolute;top:0;right:0;left:0;height:3px;
+  background:linear-gradient(90deg,var(--accent-cyan),var(--accent-magenta));
+}
+.certificate h3{
+  font-family:'Rubik',sans-serif;font-weight:800;font-size:1.2rem;
+  color:var(--accent-cyan);margin-bottom:14px;
+}
+.cert-details{
+  text-align:right;font-size:.9rem;line-height:2;color:var(--text-secondary);
+}
+.cert-details strong{color:var(--text-primary)}
+.cert-status{
+  display:inline-block;padding:4px 14px;border-radius:20px;
+  font-weight:700;font-size:.85rem;margin-top:8px;
+}
+.cert-status.pass{background:rgba(0,230,118,.12);color:var(--accent-green);border:1px solid rgba(0,230,118,.3)}
+.cert-status.fail{background:rgba(255,23,68,.1);color:var(--accent-red);border:1px solid rgba(255,23,68,.3)}
+
+/* ── Wrong Answers Breakdown ── */
+.wrong-breakdown{
+  background:var(--bg-card);border:1px solid rgba(255,23,68,.15);
+  border-radius:var(--radius);padding:20px 24px;margin:20px 0;
+  text-align:right;
+}
+.wrong-breakdown h4{
+  font-family:'Rubik',sans-serif;font-weight:700;font-size:.95rem;
+  color:var(--accent-red);margin-bottom:14px;
+}
+.wrong-item{
+  padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);
+  font-size:.85rem;line-height:1.6;color:var(--text-secondary);
+}
+.wrong-item:last-child{border-bottom:none}
+.wrong-item .wi-q{color:var(--text-primary);font-weight:500}
+.wrong-item .wi-cat{
+  display:inline-block;font-size:.72rem;padding:2px 8px;
+  border-radius:10px;background:rgba(224,64,251,.1);color:var(--accent-magenta);
+  margin-right:6px;
+}
+
+/* ── Email Sent Toast ── */
+.email-sent-toast{
+  background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.3);
+  border-radius:var(--radius);padding:16px 24px;margin:20px 0;
+  font-size:.9rem;color:var(--accent-green);text-align:center;
+  animation:feedIn .4s ease;
+}
+
+/* ── Share Buttons ── */
+.share-section{margin:28px 0 20px}
+.share-section h4{
+  font-family:'Rubik',sans-serif;font-weight:600;font-size:.9rem;
+  color:var(--text-secondary);margin-bottom:14px;
+}
+.share-buttons{
+  display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
+}
+.share-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Heebo',sans-serif;font-weight:500;font-size:.9rem;
+  padding:12px 22px;border-radius:50px;cursor:pointer;
+  border:1.5px solid;transition:var(--transition);background:transparent;
+}
+.share-btn:hover{transform:translateY(-2px)}
+.share-btn.copy{border-color:var(--accent-cyan);color:var(--accent-cyan)}
+.share-btn.copy:hover{background:rgba(0,229,255,.08)}
+.share-btn.email{border-color:var(--accent-magenta);color:var(--accent-magenta)}
+.share-btn.email:hover{background:rgba(224,64,251,.08)}
+.share-btn.print{border-color:var(--accent-green);color:var(--accent-green)}
+.share-btn.print:hover{background:rgba(0,230,118,.08)}
+.copy-toast{
+  display:none;font-size:.82rem;color:var(--accent-green);
+  margin-top:8px;animation:feedIn .3s ease;
+}
+
+/* ── Utility ── */
+.hidden{display:none!important}
+
+/* ── Confetti canvas ── */
+#confetti{position:fixed;inset:0;z-index:10;pointer-events:none}
+
+/* ── Print Styles ── */
+@media print{
+  body{background:#fff!important;color:#000!important}
+  body::before,body::after,.orb-2,#confetti,
+  .share-section,.btn-retry,.wrong-breakdown{display:none!important}
+  .app{max-width:100%}
+  .results{color:#000}
+  .certificate{border-color:#333;background:#f9f9f9!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .certificate h3{color:#0088cc}
+  .cert-details,.cert-details strong{color:#000}
+  .cert-status.pass{background:#e8f5e9!important;color:#2e7d32!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .cert-status.fail{background:#fce4ec!important;color:#c62828!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .result-title{color:#000!important}
+  .result-subtitle{color:#555!important}
+  .stat-box{border-color:#ccc!important;background:#f5f5f5!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .stat-box .val{color:#0088cc!important}
+  .stat-box .lbl{color:#555!important}
+  .compliance-note{background:#f0f8ff!important;border-color:#ccc!important;color:#333!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .compliance-note strong{color:#0088cc!important}
+  .employee-badge{color:#0088cc!important;border-color:#0088cc!important;background:#e0f7fa!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .score-ring .track{stroke:#ddd}
+  .score-number .pct{-webkit-text-fill-color:#0088cc;background:none}
+  .score-number .of{color:#555}
+  .logo-badge{border-color:#ccc;background:#f5f5f5!important}
+  .logo-badge span{-webkit-text-fill-color:#0088cc;background:none}
+  .header h1{-webkit-text-fill-color:#000;background:none}
+  .header p{color:#555}
+}
+
+/* ── Responsive ── */
+@media(max-width:600px){
+  .app{padding:16px 14px 40px}
+  .question-card{padding:24px 18px;border-radius:16px}
+  .option-btn{padding:14px 16px;font-size:.93rem}
+  .option-letter{width:32px;height:32px;font-size:.8rem;border-radius:8px}
+  .result-stats{grid-template-columns:1fr;gap:10px}
+  .share-buttons{flex-direction:column;align-items:center}
+  .name-form{margin:20px 12px 0;padding:24px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="orb-2"></div>
+<canvas id="confetti"></canvas>
+
+<div class="app">
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-badge">
+      <span class="shield">🛡️</span>
+      <span>SAVERONE</span>
+    </div>
+    <h1>הדרכת Anti-Fraud & Phishing</h1>
+  </div>
+
+  <!-- START SCREEN -->
+  <div id="startScreen" class="start-screen">
+    <div class="name-form">
+      <h3>👤 הזינו את שמכם לפני תחילת ההדרכה</h3>
+      <div class="name-field">
+        <label for="firstName">שם פרטי</label>
+        <input type="text" id="firstName" placeholder="לדוגמה: ישראל" autocomplete="given-name">
+      </div>
+      <div class="name-field">
+        <label for="lastName">שם משפחה</label>
+        <input type="text" id="lastName" placeholder="לדוגמה: ישראלי" autocomplete="family-name">
+      </div>
+      <div class="intro-text">
+        ברוכים הבאים להדרכת <strong>Anti-Fraud & Phishing</strong> של <strong>SaverOne</strong>.<br>
+        לפני כל שאלה תקבלו <strong>הסבר קצר על הנושא</strong> — קראו בתשומת לב ולאחר מכן ענו על השאלה. בהצלחה!
+      </div>
+      <div class="name-error" id="nameError"></div>
+      <button class="btn-start" onclick="startQuiz()" style="width:100%;justify-content:center">
+        <span>התחילו את ההדרכה</span>
+        <span style="font-size:1.3rem">←</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quizScreen" class="hidden">
+    <div class="progress-zone">
+      <div class="progress-header">
+        <span class="counter" id="counter">שאלה 1 מתוך 15</span>
+        <span class="score-live"><span class="dot"></span> <span id="liveScore">0 נכונות</span></span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+    <div id="questionArea"></div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div id="resultsScreen" class="hidden"></div>
+</div>
+
+<script>
+// ════════════════════════════════════════
+// ADMIN CONFIGURATION
+// ════════════════════════════════════════
+// After deploying the Google Apps Script, paste the web app URL here:
+const WEBHOOK_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+const ADMIN_EMAIL = 'ron@saverone.com';
+
+// ════════════════════════════════════════
+// QUESTIONS DATA
+// Answers balanced: A=4, B=4, C=4, D=3
+// ════════════════════════════════════════
+const questions = [
+  {
+    category:"פישינג",icon:"🎣",
+    training:"פישינג — הונאה במיילים מזויפים שמתחזים לגורמים מוכרים כדי לגנוב מידע. שימו לב לכתובת השולח ולשגיאות כתיב.",
+    text:"קיבלתם מייל מ-\"support@micros0ft.com\" עם בקשה דחופה לאפס סיסמה. מה עושים?",
+    options:[
+      "בודקים את כתובת השולח, מזהים שגיאת כתיב ומדווחים לצוות IT",
+      "לוחצים על הקישור ומאפסים מיד — זה דחוף!",
+      "מעבירים את המייל לקולגה לבדיקה",
+      "מוחקים את המייל בלי לדווח"
+    ],
+    correct:0,
+    explanation:"כתובת עם \"0\" במקום \"o\" היא סימן קלאסי לפישינג. תמיד בדקו את כתובת השולח ודווחו לצוות IT כדי שיחסמו את המקור."
+  },
+  {
+    category:"סיסמאות",icon:"🔑",
+    training:"סיסמה חלשה או חוזרת חושפת את כל החשבונות שלכם. סיסמה חזקה = לפחות 12 תווים עם אותיות, מספרים וסימנים.",
+    text:"מהי הדרך הבטוחה ביותר לנהל סיסמאות?",
+    options:[
+      "לשמור בקובץ Word במחשב",
+      "להשתמש במנהל סיסמאות (Password Manager) עם סיסמת אב חזקה",
+      "להשתמש באותה סיסמה חזקה לכל המערכות",
+      "לרשום על פתק ליד המסך"
+    ],
+    correct:1,
+    explanation:"מנהל סיסמאות מאחסן סיסמאות ייחודיות ומורכבות לכל שירות בצורה מוצפנת. שימוש חוזר בסיסמה אחת מסכן את כל החשבונות אם אחד מהם נפרץ."
+  },
+  {
+    category:"הנדסה חברתית",icon:"🎭",
+    training:"הנדסה חברתית — התוקף מנצל אמון ולחץ זמן כדי לחלץ מידע. צוות IT אמיתי לעולם לא יבקש סיסמה בטלפון.",
+    text:"מישהו מתקשר ומזדהה כ-\"טכנאי IT\" ומבקש את הסיסמה שלכם לצורך \"תחזוקה דחופה\". מה עושים?",
+    options:[
+      "נותנים את הסיסמה — הוא מצוות IT",
+      "מבקשים שישלח מייל עם הבקשה",
+      "מסרבים, מתקשרים ישירות לצוות IT לאימות ומדווחים",
+      "נותנים סיסמה ישנה שכבר לא בשימוש"
+    ],
+    correct:2,
+    explanation:"צוות IT לעולם לא יבקש סיסמה בטלפון. תמיד אמתו זהות דרך ערוץ רשמי נפרד. זו טכניקת הנדסה חברתית נפוצה."
+  },
+  {
+    category:"גלישה בטוחה",icon:"🌐",
+    training:"WiFi ציבורי אינו מוצפן — כל אחד ברשת יכול ליירט את התעבורה שלכם. אל תבצעו פעולות רגישות ללא VPN.",
+    text:"אתם מחוברים ל-WiFi ציבורי בבית קפה. מה מסוכן לעשות?",
+    options:[
+      "לגלוש באתר חדשות",
+      "לחפש מתכון באינטרנט",
+      "לקרוא מייל שיווקי",
+      "להתחבר לחשבון הבנק ללא VPN"
+    ],
+    correct:3,
+    explanation:"WiFi ציבורי חשוף להאזנות. פעולות רגישות כמו בנקאות דורשות חיבור מאובטח — השתמשו ב-VPN או ברשת הסלולרית."
+  },
+  {
+    category:"כופרה (Ransomware)",icon:"💀",
+    training:"כופרה מצפינה את הקבצים שלכם ודורשת תשלום. ללא גיבוי — המידע אבוד. תשלום כופר אינו מבטיח שחזור.",
+    text:"מה הפעולה החשובה ביותר להגנה מפני מתקפת כופרה?",
+    options:[
+      "לשלם את הכופר מהר כדי לקבל בחזרה את הקבצים",
+      "לבצע גיבויים סדירים ומנותקים מהרשת",
+      "להתקין שני אנטי-וירוסים במקביל",
+      "לא לכבות את המחשב לעולם"
+    ],
+    correct:1,
+    explanation:"גיבויים מנותקים (Offline Backups) מאפשרים שחזור ללא תשלום כופר. תשלום כופר אינו מבטיח שחזור ומממן פעילות פלילית."
+  },
+  {
+    category:"אימות דו-שלבי",icon:"🔐",
+    training:"אימות דו-שלבי מוסיף שכבת הגנה — גם אם הסיסמה נגנבת, התוקף לא יוכל להיכנס ללא קוד מהטלפון.",
+    text:"מהו אימות דו-שלבי (2FA/MFA) ולמה הוא חשוב?",
+    options:[
+      "שני אנשים צריכים לאשר כניסה",
+      "שימוש בשתי סיסמאות שונות",
+      "שכבת אבטחה נוספת מעבר לסיסמה — כמו קוד SMS או אפליקציית אימות",
+      "הצפנה כפולה של הסיסמה"
+    ],
+    correct:2,
+    explanation:"MFA דורש \"משהו שאתם יודעים\" (סיסמה) + \"משהו שיש לכם\" (טלפון/מפתח). גם אם הסיסמה נגנבת, התוקף לא יוכל להיכנס."
+  },
+  {
+    category:"התקנים חיצוניים",icon:"💾",
+    training:"USB לא מזוהה עלול להכיל נוזקה שמופעלת אוטומטית בחיבור. \"USB Drop\" — תוקף משאיר USB ומקווה שמישהו יחבר.",
+    text:"מצאתם USB בחניה של המשרד. מה עושים?",
+    options:[
+      "מחברים למחשב לבדוק של מי הוא",
+      "זורקים לפח",
+      "מחברים למחשב אישי (לא של העבודה) — זה בטוח יותר",
+      "מוסרים לצוות IT בלי לחבר למחשב"
+    ],
+    correct:3,
+    explanation:"USB לא מזוהה עלול להכיל נוזקה שמופעלת אוטומטית בחיבור. \"USB Drop\" היא טכניקת תקיפה מוכרת. תמיד מסרו לצוות IT."
+  },
+  {
+    category:"AI ודיפ-פייק",icon:"🤖",
+    training:"Deepfake מאפשר זיוף קול ווידאו שנשמע אמיתי לחלוטין. תוקפים מתחזים למנהלים לבקשות כספיות דחופות.",
+    text:"קיבלתם הודעה קולית מהמנכ\"ל בבקשה דחופה להעביר כסף. הקול נשמע אמיתי. מה עושים?",
+    options:[
+      "מבצעים מיד — זה המנכ\"ל",
+      "מאמתים דרך ערוץ נפרד (טלפון, פגישה) — Deepfake קולי הוא איום אמיתי",
+      "שולחים SMS למנכ\"ל לאישור",
+      "מבצעים חלק מהסכום כבדיקה"
+    ],
+    correct:1,
+    explanation:"טכנולוגיית Deepfake מאפשרת זיוף קול ווידאו. תמיד אמתו בקשות כספיות או חריגות בערוץ שונה. אף בקשה דחופה לא גוברת על אימות."
+  }
+];
+
+// ════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════
+let currentQ = 0, score = 0, answered = false;
+let employeeName = '';
+let answers = []; // {qIndex, chosenIdx, isCorrect}
+
+// ════════════════════════════════════════
+// FUNCTIONS
+// ════════════════════════════════════════
+function startQuiz(){
+  const first = document.getElementById('firstName').value.trim();
+  const last = document.getElementById('lastName').value.trim();
+  const err = document.getElementById('nameError');
+
+  if(!first || !last){
+    err.textContent = 'נא למלא שם פרטי ושם משפחה';
+    return;
+  }
+  err.textContent = '';
+  employeeName = first + ' ' + last;
+
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('quizScreen').classList.remove('hidden');
+  currentQ = 0; score = 0; answered = false;
+  answers = [];
+  renderQuestion();
+}
+
+function renderQuestion(){
+  answered = false;
+  const q = questions[currentQ];
+  const pct = ((currentQ) / questions.length * 100).toFixed(0);
+  document.getElementById('counter').textContent = `שאלה ${currentQ+1} מתוך ${questions.length}`;
+  document.getElementById('liveScore').textContent = `${score} נכונות`;
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  const letters = ['A','B','C','D'];
+  let html = `<div class="question-card" id="qCard">
+    <span class="q-category">${q.category}</span>
+    <span class="q-icon">${q.icon}</span>
+    <div class="q-training">${q.training}</div>
+    <div class="q-text">${q.text}</div>
+    <div class="options">
+      ${q.options.map((opt, i) => `
+        <button class="option-btn" onclick="selectAnswer(${i})" data-idx="${i}">
+          <span class="option-letter">${letters[i]}</span>
+          <span>${opt}</span>
+        </button>
+      `).join('')}
+    </div>
+    <div id="feedback" class="hidden"></div>
+    <button id="btnNext" class="btn-next hidden" onclick="nextQuestion()">
+      <span>${currentQ < questions.length - 1 ? 'לשאלה הבאה' : 'לתוצאות'}</span>
+      <span class="arrow">←</span>
+    </button>
+  </div>`;
+  document.getElementById('questionArea').innerHTML = html;
+}
+
+function selectAnswer(idx){
+  if(answered) return;
+  answered = true;
+  const q = questions[currentQ];
+  const isCorrect = idx === q.correct;
+  if(isCorrect) score++;
+
+  // Track answer
+  answers.push({qIndex: currentQ, chosenIdx: idx, isCorrect});
+
+  // Mark buttons
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach((btn, i) => {
+    if(i === q.correct) btn.classList.add('correct');
+    else if(i === idx && !isCorrect) btn.classList.add('wrong');
+    if(i !== idx && i !== q.correct) btn.classList.add('disabled');
+  });
+
+  // Feedback
+  const fb = document.getElementById('feedback');
+  fb.className = `feedback ${isCorrect ? 'correct' : 'wrong'}`;
+  fb.innerHTML = `<span class="fb-icon">${isCorrect ? '✅' : '❌'}</span>
+    ${isCorrect ? '<strong>נכון!</strong>' : '<strong>לא נכון.</strong>'} ${q.explanation}`;
+  fb.classList.remove('hidden');
+
+  // Update live score
+  document.getElementById('liveScore').textContent = `${score} נכונות`;
+
+  // Show next
+  document.getElementById('btnNext').classList.remove('hidden');
+}
+
+function nextQuestion(){
+  currentQ++;
+  if(currentQ < questions.length){
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function getDateStr(){
+  return new Date().toLocaleDateString('he-IL');
+}
+
+function getPassStatus(pct){
+  return pct >= 70;
+}
+
+function sendResultsToServer(){
+  const pct = Math.round(score / questions.length * 100);
+  const passed = getPassStatus(pct);
+  const dateStr = getDateStr();
+  const wrongAnswers = answers.filter(a => !a.isCorrect);
+  const letters = ['A','B','C','D'];
+
+  const payload = {
+    name: employeeName,
+    date: dateStr,
+    score: score,
+    total: questions.length,
+    percentage: pct,
+    passed: passed,
+    wrongQuestions: wrongAnswers.map(a => {
+      const q = questions[a.qIndex];
+      return {
+        number: a.qIndex + 1,
+        category: q.category,
+        question: q.text,
+        employeeAnswer: letters[a.chosenIdx] + ' - ' + q.options[a.chosenIdx],
+        correctAnswer: letters[q.correct] + ' - ' + q.options[q.correct]
+      };
+    })
+  };
+
+  // Send to Google Apps Script webhook
+  if(WEBHOOK_URL && WEBHOOK_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'){
+    fetch(WEBHOOK_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(() => {
+      const toast = document.getElementById('emailToast');
+      if(toast) toast.textContent = '✅ התוצאות נשלחו בהצלחה למערכת.';
+    }).catch(() => {
+      const toast = document.getElementById('emailToast');
+      if(toast) toast.textContent = '⚠️ שגיאה בשליחה. התוצאות נשמרו מקומית.';
+    });
+  }
+
+  // Always save locally as backup
+  try {
+    const stored = JSON.parse(localStorage.getItem('cyberTrainingResults') || '[]');
+    stored.push(payload);
+    localStorage.setItem('cyberTrainingResults', JSON.stringify(stored));
+  } catch(e){}
+}
+
+function showResults(){
+  document.getElementById('quizScreen').classList.add('hidden');
+  const screen = document.getElementById('resultsScreen');
+  screen.classList.remove('hidden');
+
+  const pct = Math.round(score / questions.length * 100);
+  const circ = 2 * Math.PI * 88; // r=88
+  const passed = getPassStatus(pct);
+  const dateStr = getDateStr();
+
+  let title, subtitle, titleColor;
+  if(pct >= 90){
+    title = '🏆 מומחה אבטחה!';
+    subtitle = 'מרשים! יש לכם ידע מצוין באבטחת מידע. המשיכו לשמור על ערנות.';
+    titleColor = 'var(--accent-green)';
+  } else if(pct >= 70){
+    title = '👍 בדרך הנכונה!';
+    subtitle = 'ידע טוב, עם מקום לשיפור בכמה נושאים. המשיכו ללמוד!';
+    titleColor = 'var(--accent-cyan)';
+  } else if(pct >= 50){
+    title = '📚 צריך קצת תרגול';
+    subtitle = 'יש בסיס, אבל חשוב להעמיק את הידע בנושאי אבטחה. חזרו על החומר.';
+    titleColor = 'var(--accent-amber)';
+  } else {
+    title = '⚠️ חובה ללמוד ולחזור';
+    subtitle = 'אבטחת מידע היא אחריות של כולנו. נא לעבור שוב על ההדרכה בתשומת לב.';
+    titleColor = 'var(--accent-red)';
+  }
+
+  // Build wrong answers breakdown
+  const wrongAnswers = answers.filter(a => !a.isCorrect);
+  const letters = ['A','B','C','D'];
+  let wrongHtml = '';
+  if(wrongAnswers.length > 0){
+    wrongHtml = `<div class="wrong-breakdown">
+      <h4>❌ נושאים לשיפור (${wrongAnswers.length} שאלות שגויות)</h4>
+      ${wrongAnswers.map(a => {
+        const q = questions[a.qIndex];
+        return `<div class="wrong-item">
+          <span class="wi-cat">${q.category}</span>
+          <span class="wi-q">שאלה ${a.qIndex+1}: ${q.text}</span><br>
+          <span style="color:var(--accent-red)">תשובתך: ${letters[a.chosenIdx]} - ${q.options[a.chosenIdx]}</span><br>
+          <span style="color:var(--accent-green)">תשובה נכונה: ${letters[q.correct]} - ${q.options[q.correct]}</span>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  screen.innerHTML = `
+    <div class="results">
+      <svg width="0" height="0"><defs>
+        <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="var(--accent-cyan)"/>
+          <stop offset="100%" stop-color="var(--accent-magenta)"/>
+        </linearGradient>
+      </defs></svg>
+
+      <div class="employee-badge">👤 ${employeeName}</div>
+
+      <div class="score-ring">
+        <svg width="200" height="200" viewBox="0 0 200 200">
+          <circle class="track" cx="100" cy="100" r="88"/>
+          <circle class="fill-ring" cx="100" cy="100" r="88"
+            stroke-dasharray="${circ}"
+            stroke-dashoffset="${circ}"
+            id="scoreArc"/>
+        </svg>
+        <div class="score-number">
+          <span class="pct" id="pctNum">0<span class="pct-sign">%</span></span>
+          <span class="of">${score} מתוך ${questions.length}</span>
+        </div>
+      </div>
+
+      <div class="result-title" style="color:${titleColor}">${title}</div>
+      <div class="result-subtitle">${subtitle}</div>
+
+      <div class="result-stats">
+        <div class="stat-box"><div class="val">${score}</div><div class="lbl">תשובות נכונות</div></div>
+        <div class="stat-box"><div class="val">${questions.length - score}</div><div class="lbl">תשובות שגויות</div></div>
+        <div class="stat-box"><div class="val">${questions.length}</div><div class="lbl">סה"כ שאלות</div></div>
+      </div>
+
+      <div class="certificate">
+        <h3>📜 אישור השתתפות בהדרכת Anti-Fraud & Phishing</h3>
+        <div class="cert-details">
+          <strong>שם העובד/ת:</strong> ${employeeName}<br>
+          <strong>ציון:</strong> ${score}/${questions.length} (${pct}%)<br>
+          <strong>תאריך:</strong> ${dateStr}<br>
+          <strong>סטטוס:</strong> <span class="cert-status ${passed ? 'pass' : 'fail'}">${passed ? '✅ עבר/ה בהצלחה' : '❌ נדרשת חזרה על ההדרכה'}</span><br>
+          <br>
+          השלמת שאלון זה מהווה אישור על ביצוע הדרכת Anti-Fraud & Phishing של החברה.
+        </div>
+      </div>
+
+      ${wrongHtml}
+
+      <div class="email-sent-toast" id="emailToast">
+        📧 התוצאות נשלחו למערכת — הדוח המרכז יישלח למנהל/ת.
+      </div>
+
+      <div class="share-section">
+        <div class="share-buttons">
+          <button class="share-btn print" onclick="printCertificate()">🖨️ הדפס אישור</button>
+        </div>
+      </div>
+
+      <button class="btn-retry" onclick="retry()">
+        <span>🔄</span>
+        <span>נסו שוב</span>
+      </button>
+    </div>
+  `;
+
+  // Animate ring
+  requestAnimationFrame(() => {
+    const arc = document.getElementById('scoreArc');
+    const target = circ - (pct / 100 * circ);
+    arc.style.strokeDashoffset = target;
+  });
+
+  // Animate number
+  animateNumber(0, pct, 1400);
+
+  // Confetti if good score
+  if(pct >= 70) launchConfetti();
+
+  // Auto-send results to server
+  sendResultsToServer();
+}
+
+function printCertificate(){
+  window.print();
+}
+
+function animateNumber(from, to, dur){
+  const el = document.getElementById('pctNum');
+  const start = performance.now();
+  function tick(now){
+    const t = Math.min((now - start) / dur, 1);
+    const ease = 1 - Math.pow(1 - t, 3);
+    const val = Math.round(from + (to - from) * ease);
+    el.innerHTML = `${val}<span class="pct-sign">%</span>`;
+    if(t < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function retry(){
+  document.getElementById('resultsScreen').classList.add('hidden');
+  document.getElementById('resultsScreen').innerHTML = '';
+  document.getElementById('startScreen').classList.remove('hidden');
+  document.getElementById('firstName').value = '';
+  document.getElementById('lastName').value = '';
+  document.getElementById('nameError').textContent = '';
+}
+
+// ════════════════════════════════════════
+// CONFETTI
+// ════════════════════════════════════════
+function launchConfetti(){
+  const c = document.getElementById('confetti');
+  const ctx = c.getContext('2d');
+  c.width = window.innerWidth;
+  c.height = window.innerHeight;
+  const pieces = [];
+  const colors = ['#00e5ff','#e040fb','#00e676','#ffab00','#ff1744','#fff'];
+  for(let i = 0; i < 120; i++){
+    pieces.push({
+      x: Math.random() * c.width,
+      y: Math.random() * c.height - c.height,
+      w: Math.random() * 8 + 4,
+      h: Math.random() * 4 + 2,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      vy: Math.random() * 3 + 2,
+      vx: (Math.random() - 0.5) * 2,
+      rot: Math.random() * 360,
+      vr: (Math.random() - 0.5) * 8,
+      opacity: 1
+    });
+  }
+  let frame = 0;
+  function draw(){
+    ctx.clearRect(0, 0, c.width, c.height);
+    let alive = false;
+    pieces.forEach(p => {
+      p.y += p.vy;
+      p.x += p.vx;
+      p.rot += p.vr;
+      if(frame > 90) p.opacity -= 0.01;
+      if(p.opacity <= 0) return;
+      alive = true;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot * Math.PI / 180);
+      ctx.globalAlpha = Math.max(0, p.opacity);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    });
+    frame++;
+    if(alive) requestAnimationFrame(draw);
+    else ctx.clearRect(0, 0, c.width, c.height);
+  }
+  draw();
+}
+</script>
+</body>
+</html>
